@@ -39,6 +39,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
+          gcloud auth configure-docker ${{ env.GKE_ZONE }}-docker.pkg.dev
           docker build -t ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }} .
           docker push ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }}
 
