@@ -23,7 +23,7 @@ jobs:
         - name: Build and push Docker image
           env:
             GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT_ID }}
-          run:
+          run: |
             gcloud auth configure-docker southamerica-east1-docker.pkg.dev
             docker build -t southamerica-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/cloud-demo/openjdk:17-jdk-alpine .
             docker push southamerica-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/cloud-demo/openjdk:17-jdk-alpine
