@@ -52,7 +52,9 @@ jobs:
           docker push ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }}
 
       - name: Deploy to GKE
+        env:
+            IMAGE_TAG: ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }}
         run: |
           gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --region ${{ env.GKE_ZONE }} --project ${{ secrets.GOOGLE_PROJECT_ID }}
-          sed -i "s/IMAGE_TAG/${{ env.GKE_ZONE }}-docker.pkg.dev\/${{ env.PROJECT_ID }}\/${{ env.IMAGE }}:${{ github.sha }}/g" deployment.yaml
+          sed -i "s/IMAGE_TAG/${{ env.IMAGE_TAG }}/g" deployment.yaml
           kubectl apply -f deployment.yaml
