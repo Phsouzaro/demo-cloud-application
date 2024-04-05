@@ -39,7 +39,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          gcloud container clusters get-credentials ${{ GKE_CLUSTER }} --region ${{ GKE_ZONE }}
+          gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --region ${{ env.GKE_ZONE }}
           docker build -t ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }} .
           docker push ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }}
 
