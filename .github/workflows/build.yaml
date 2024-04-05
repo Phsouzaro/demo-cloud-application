@@ -56,4 +56,8 @@ jobs:
           gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --region ${{ env.GKE_ZONE }} --project ${{ secrets.GOOGLE_PROJECT_ID }}
           kubectl set image deployment/${{ env.DEPLOYMENT_NAME }} ${DEPLOYMENT_NAME}=${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }}
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
+          sed -i "s/ZONE/${{ env.GKE_ZONE }}/g" deployment.yaml
+          sed -i "s/GOOGLE_PROJECT/${{ secrets.GOOGLE_PROJECT_ID }}/g" deployment.yaml
+          sed -i "s/DEPLOYMENT_NAME/${{ env.DEPLOYMENT_NAME }}/g" deployment.yaml
+          sed -i "s/VERSION/${{ github.sha }}/g" deployment.yaml
           kubectl apply -f deployment.yaml
