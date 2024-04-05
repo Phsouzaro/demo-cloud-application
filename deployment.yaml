@@ -28,6 +28,6 @@ spec:
     spec:
       containers:
         - name: my-java-app
-          image: ZONE-docker.pkg.dev/GOOGLE_PROJECT/cloud-demo/DEPLOYMENT_NAME:VERSION
+          image: ${IMAGE_TAG}
           ports:
             - containerPort: 8080

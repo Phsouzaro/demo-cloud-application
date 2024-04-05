@@ -27,14 +27,6 @@ jobs:
           service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
           export_default_credentials: true
 
-      - name: Install gke-gcloud-auth-plugin
-        run: gcloud components install gke-gcloud-auth-plugin
-
-      - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v0.4.0
-        with:
-          credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-
       - name: Configure Docker to use gcloud command-line tool as a credential helper
         run: gcloud --quiet auth configure-docker
 
@@ -47,17 +39,11 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          gcloud auth configure-docker ${{ env.GKE_ZONE }}-docker.pkg.dev
           docker build -t ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }} .
           docker push ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }}
 
       - name: Deploy to GKE
         run: |
           gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --region ${{ env.GKE_ZONE }} --project ${{ secrets.GOOGLE_PROJECT_ID }}
-          kubectl set image deployment/${{ env.DEPLOYMENT_NAME }} ${DEPLOYMENT_NAME}=${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.IMAGE }}:${{ github.sha }}
-          kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
-          sed -i "s/ZONE/${{ env.GKE_ZONE }}/g" deployment.yaml
-          sed -i "s/GOOGLE_PROJECT/${{ secrets.GOOGLE_PROJECT_ID }}/g" deployment.yaml
-          sed -i "s/DEPLOYMENT_NAME/${{ env.DEPLOYMENT_NAME }}/g" deployment.yaml
-          sed -i "s/VERSION/${{ github.sha }}/g" deployment.yaml
+          sed -i "s/\${{IMAGE_TAG}}/${{ env.GKE_ZONE }}-docker.pkg.dev\/${{ env.PROJECT_ID }}\/${{ env.IMAGE }}:${{ github.sha }}/g" deployment.yaml
           kubectl apply -f deployment.yaml
