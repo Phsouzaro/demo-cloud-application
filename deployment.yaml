@@ -28,6 +28,6 @@ spec:
     spec:
       containers:
         - name: my-java-app
-          image: southamerica-east1-docker.pkg.dev/GOOGLE_PROJECT/cloud-demo/my-java-app:latest
+          image: cloud-demo/openjdk:latest
           ports:
             - containerPort: 8080
