@@ -39,5 +39,5 @@ jobs:
           GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT_ID }}
         run: |
           gcloud container clusters get-credentials gke-shared-des --region us-central1
-          sed -i "s/GOOGLE_PROJECT/${{ secrets.GOOGLE_PROJECT_ID }}/g" infra-as-code/deployment.yaml
-          kubectl apply -f infra-as-code/deployment.yaml
+          sed -i "s/GOOGLE_PROJECT/${{ secrets.GOOGLE_PROJECT_ID }}/g" correct/path/to/infra-as-code/deployment.yaml
+          kubectl apply -f /infra-as-code/deployment.yaml
