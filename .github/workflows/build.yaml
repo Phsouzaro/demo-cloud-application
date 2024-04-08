@@ -44,7 +44,7 @@ jobs:
           IMAGE_NAME: ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ secrets.GOOGLE_PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}
         run: |
           gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --region ${{ env.GKE_ZONE }}
-          sed -i "s|APPNAME|$APPNAME|g" resources.yaml
-          sed -i "s|IMAGE_NAME|$IMAGE_NAME|g" resources.yaml
+          sed -i "s|APPNAME|$APPNAME|g" deployment.yaml
+          sed -i "s|IMAGE_NAME|$IMAGE_NAME|g" deployment.yaml
           kubectl apply -f deployment.yaml
 
