@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-java-app
+  name: APPNAME
 spec:
   type: LoadBalancer
   selector:
-    app: my-java-app
+    app: APPNAME
   ports:
     - port: 8080
       targetPort: 8080
@@ -13,21 +13,19 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-java-app
+  name: APPNAME
   labels:
-    app: my-java-app
+    app: APPNAME
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: my-java-app
+      app: APPNAME
   template:
     metadata:
       labels:
-        app: my-java-app
+        app: APPNAME
     spec:
       containers:
-        - name: my-java-app
-          image: ${IMAGE_TAG}
-          ports:
-            - containerPort: 8080
+        - name: APPNAME
+          image: IMAGE_NAME
